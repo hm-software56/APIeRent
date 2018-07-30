@@ -1,0 +1,484 @@
+html,
+body {
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif, 'Saysettha OT' !important;
+}
+
+.wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 0 0 60px;
+}
+
+.wrap > .container {
+    padding: 70px 15px 20px;
+}
+
+.footer {
+    height: 60px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.jumbotron {
+    text-align: center;
+    background-color: transparent;
+}
+.sidebar-fixed-top {
+    position: fixed !important;
+    right: 0;
+    left: 0;
+    z-index: 1 !important;
+}
+.main-sidebar {
+    padding-top: 50px !important;
+}
+input{
+    border-radius: 5px !important;
+}
+.rm_p{
+    border-left: 0px !important; 
+    border-bottom-left-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+}
+.form-group {
+    margin-bottom: 5px !important;
+}
+.content {
+    padding-top: 50px !important;
+}
+.content-wrapper {
+    background-color: #fff !important;
+}
+.modal-header {
+    padding: 9px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #0480be;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color:#fff !important;
+}
+.modal-content {
+    -webkit-border-radius: 5px !important;
+    -moz-border-radius: 5px !important;
+    border-radius: 5px !important;
+}
+.vmedle {
+    transform: translateY(50%);
+}
+
+.vertical-alignment-helper {
+    display: table;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    /* This makes sure that we can still click outside of the modal to close it */
+}
+
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events: none;
+}
+.modal{
+    padding: 15px !important;
+}
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width: inherit;
+    max-width: inherit;
+    /* For Bootstrap 4 - to avoid the modal window stretching full width */
+    height: inherit;
+    /* To center horizontally */
+    pointer-events: all;
+}
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+.not-set {
+    color: #c55;
+    font-style: italic;
+}
+
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+
+a.asc:after {
+    content: /*"\e113"*/ "\e151";
+}
+
+a.desc:after {
+    content: /*"\e114"*/ "\e152";
+}
+
+.sort-numerical a.asc:after {
+    content: "\e153";
+}
+
+.sort-numerical a.desc:after {
+    content: "\e154";
+}
+
+.sort-ordinal a.asc:after {
+    content: "\e155";
+}
+
+.sort-ordinal a.desc:after {
+    content: "\e156";
+}
+
+.grid-view th {
+    white-space: nowrap;
+}
+
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
+
+/* align the logout "link" (button in form) of the navbar */
+.nav li > form > button.logout {
+    padding: 15px;
+    border: none;
+}
+
+@media(max-width:767px) {
+    .nav li > form > button.logout {
+        display:block;
+        text-align: left;
+        width: 100%;
+        padding: 10px 15px;
+    }
+}
+
+.nav > li > form > button.logout:focus,
+.nav > li > form > button.logout:hover {
+    text-decoration: none;
+}
+
+.nav > li > form > button.logout:focus {
+    outline: none;
+}
+
+#loader {
+    position: fixed;
+    left: 45%;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 999999;
+}
+#text-medel {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.bnt-fixed {
+    position: fixed;
+    right: 0px;
+    z-index: 10000;
+    border-top-left-radius: 0px !important; 
+     border-top-right-radius: 0px !important;
+}
+
+.navbardetail {
+    overflow: hidden;
+    background-color: #3c8dbc;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index:1030;
+    margin-left:-15px !important;
+}
+
+.navbardetail a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding:15px;
+    text-decoration: none;
+    font-size: 17px;
+}
+.wrapper
+{
+    background: #fff !important;
+}
+.navbardetail a:hover {
+    background: #3c8dbc;
+}
+.navtile{
+    padding: 16px;
+    color: #fff;
+}
+.file-footer-caption{
+    display:none !important;
+}
+.file-upload-indicator{
+    display:none !important;
+}
+.file-thumbnail-footer{
+    height: auto !important;
+}
+.kv-file-content{
+    width: 110px !important;
+    height: 110px !important;
+}
+.file-preview-thumbnails{
+ display: inline !important;
+}
+.file-preview{
+    padding: 0px !important;
+}
+.kv-zoom-title{
+    display:none !important;
+}
+.file-drag-handle{
+     display:none !important;
+}
+.kv-zoom-actions{
+    display:none !important;
+}
+.file-zoom-content{
+ height: auto !important;
+}
+.file-drop-zone-title{
+    padding: 0px !important;
+}
+
+.funkyradio div {
+    clear: both;
+    overflow: hidden;
+}
+
+.funkyradio label {
+    width: 100%;
+    border-radius: 3px;
+    border: 1px solid #D1D3D4;
+    font-weight: normal;
+}
+
+.funkyradio input[type="radio"]:empty,
+.funkyradio input[type="checkbox"]:empty {
+    display: none;
+}
+
+.funkyradio input[type="radio"]:empty~label,
+.funkyradio input[type="checkbox"]:empty~label {
+    position: relative;
+    line-height: 2.5em;
+    text-indent: 3.25em;
+    margin-top: 0em;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.funkyradio input[type="radio"]:empty~label:before,
+.funkyradio input[type="checkbox"]:empty~label:before {
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    content: '';
+    width: 2.5em;
+    background: #D1D3D4;
+    border-radius: 3px 0 0 3px;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked)~label,
+.funkyradio input[type="checkbox"]:hover:not(:checked)~label {
+    color: #888;
+}
+
+.funkyradio input[type="radio"]:hover:not(:checked)~label:before,
+.funkyradio input[type="checkbox"]:hover:not(:checked)~label:before {
+    content: '\2714';
+    text-indent: .9em;
+    color: #C2C2C2;
+}
+
+.funkyradio input[type="radio"]:checked~label,
+.funkyradio input[type="checkbox"]:checked~label {
+    color: #777;
+}
+
+.funkyradio input[type="radio"]:checked~label:before,
+.funkyradio input[type="checkbox"]:checked~label:before {
+    content: '\2714';
+    text-indent: .9em;
+    color: #333;
+    background-color: #ccc;
+}
+
+.funkyradio input[type="radio"]:focus~label:before,
+.funkyradio input[type="checkbox"]:focus~label:before {
+    box-shadow: 0 0 0 3px #999;
+}
+
+.funkyradio-default input[type="radio"]:checked~label:before,
+.funkyradio-default input[type="checkbox"]:checked~label:before {
+    color: #333;
+    background-color: #ccc;
+}
+
+.funkyradio-primary input[type="radio"]:checked~label:before,
+.funkyradio-primary input[type="checkbox"]:checked~label:before {
+    color: #fff;
+    background-color: #337ab7;
+}
+
+.funkyradio-success input[type="radio"]:checked~label:before,
+.funkyradio-success input[type="checkbox"]:checked~label:before {
+    color: #fff;
+    background-color: #5cb85c;
+}
+
+.funkyradio-danger input[type="radio"]:checked~label:before,
+.funkyradio-danger input[type="checkbox"]:checked~label:before {
+    color: #fff;
+    background-color: #d9534f;
+}
+
+.funkyradio-warning input[type="radio"]:checked~label:before,
+.funkyradio-warning input[type="checkbox"]:checked~label:before {
+    color: #fff;
+    background-color: #f0ad4e;
+}
+
+.funkyradio-info input[type="radio"]:checked~label:before,
+.funkyradio-info input[type="checkbox"]:checked~label:before {
+    color: #fff;
+    background-color: #5bc0de;
+}
+.line{
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: #C2C2C2;
+    margin-bottom: 5px;
+}
+
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.demo-gallery a {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-touch-callout: none;
+    display: block;
+    float: left;
+    margin: 0 12px 12px 0;
+    width: 150px;
+    line-height: 0;
+}
+demo-gallery__img--main {
+    width: auto;
+    height: auto;
+}
+.main-footer{
+    background: #3c8dbc !important;
+    color: #fff;
+    border-top: 0px solid #d2d6de !important;
+    padding: 10px !important;
+}
+
+.nav-tabs {
+    border-bottom: 2px solid #DDD;
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover {
+    border-width: 0;
+}
+
+.nav-tabs>li>a {
+    border: none;
+    color: #666;
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li>a:hover {
+    border: none;
+    color: #4285F4 !important;
+    background: transparent;
+}
+
+.nav-tabs>li>a::after {
+    content: "";
+    background: #4285F4;
+    height: 2px;
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    bottom: -1px;
+    transition: all 250ms ease 0s;
+    transform: scale(0);
+}
+
+.nav-tabs>li.active>a::after,
+.nav-tabs>li:hover>a::after {
+    transform: scale(1);
+}
+
+.tab-nav>li>a::after {
+    background: #21527d none repeat scroll 0% 0%;
+    color: #fff;
+}
+.ajax-load {
+    padding: 3px 0px;
+    width: 100%;
+}
+#img_left{
+    float: left;
+    width: 100px;
+    padding-right: 5px;
+    border-radius: 8px;
+}
+
