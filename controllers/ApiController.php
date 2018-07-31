@@ -5,6 +5,8 @@ use app\models\User;
 use app\models\Register;
 use yii\web\Response;
 use yii\httpclient\Client;
+use app\models\Properties;
+use app\models\Photo;
 class ApiController extends \yii\web\Controller
 {
     public function actionIndex()
@@ -130,5 +132,52 @@ class ApiController extends \yii\web\Controller
             }
             
         }
+    }
+    public function actionListhouse()
+    {
+        $model=Properties::find()
+        ->select('properties.id ,
+        pd.details,
+        pd.id as did,
+        pd.status as dstatus,
+        pd.fee,
+        pd.per,
+        type.name as type_name,
+        photo.name as photo_name
+        ')
+        ->joinWith(['propertiesDetails as pd','propertiesType as type','propertiesDetails.photos as photo'])->asArray()->all();
+        
+       \Yii::$app->response->format = Response::FORMAT_JSON;
+        $row=['rows'=>$model];
+        return $row;
+    }
+
+    public function actionDetailhouse($id)
+    {
+        $model=Properties::find()
+        ->select('properties.id ,
+        pd.details,
+        pd.id as did,
+        pd.status as dstatus,
+        pd.fee,
+        pd.per,
+        type.name as type_name,
+        photo.name as photo_name
+        ')
+        ->joinWith(['propertiesDetails as pd','propertiesType as type','propertiesDetails.photos as photo'])
+        ->where(['properties.id'=>$id])
+        ->asArray()
+        ->all();
+       \Yii::$app->response->format = Response::FORMAT_JSON;
+        $row=['rows'=>$model];
+        return $row;
+       // return $row;
+    }
+    public function actionPhotos($did)
+    {
+        $photos=Photo::find()->where(['properties_detail_id'=>$did])->asArray()->all();
+       \Yii::$app->response->format = Response::FORMAT_JSON;
+        $row=['photos'=>$photos];
+        return $row;
     }
 }
