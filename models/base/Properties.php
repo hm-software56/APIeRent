@@ -13,14 +13,17 @@ use Yii;
  * @property integer $status
  * @property string $date_start
  * @property string $date_end
- * @property integer $longtitude
- * @property integer $lattitude
+ * @property double $longtitude
+ * @property double $lattitude
  * @property string $date_update
  * @property string $date_create
- * @property integer $properties_type_id
  * @property integer $packages_id
  * @property integer $user_id
+ * @property integer $properties_type_id
  *
+ * @property \app\models\AlertPackage[] $alertPackages
+ * @property \app\models\Comments[] $comments
+ * @property \app\models\LikeProperty[] $likeProperties
  * @property \app\models\Photo[] $photos
  * @property \app\models\Packages $packages
  * @property \app\models\PropertiesType $propertiesType
@@ -47,9 +50,10 @@ abstract class Properties extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status', 'date_start', 'date_end', 'date_create', 'properties_type_id', 'packages_id', 'user_id'], 'required'],
-            [['status', 'longtitude', 'lattitude', 'properties_type_id', 'packages_id', 'user_id'], 'integer'],
+            [['status', 'date_start', 'date_end', 'date_create', 'packages_id', 'user_id', 'properties_type_id'], 'required'],
+            [['status', 'packages_id', 'user_id', 'properties_type_id'], 'integer'],
             [['date_start', 'date_end', 'date_update', 'date_create'], 'safe'],
+            [['longtitude', 'lattitude'], 'number'],
             [['packages_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Packages::className(), 'targetAttribute' => ['packages_id' => 'id']],
             [['properties_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\PropertiesType::className(), 'targetAttribute' => ['properties_type_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
@@ -70,10 +74,34 @@ abstract class Properties extends \yii\db\ActiveRecord
             'lattitude' => Yii::t('models', 'Lattitude'),
             'date_update' => Yii::t('models', 'Date Update'),
             'date_create' => Yii::t('models', 'Date Create'),
-            'properties_type_id' => Yii::t('models', 'Properties Type ID'),
             'packages_id' => Yii::t('models', 'Packages ID'),
             'user_id' => Yii::t('models', 'User ID'),
+            'properties_type_id' => Yii::t('models', 'Properties Type ID'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAlertPackages()
+    {
+        return $this->hasMany(\app\models\AlertPackage::className(), ['properties_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComments()
+    {
+        return $this->hasMany(\app\models\Comments::className(), ['properties_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLikeProperties()
+    {
+        return $this->hasMany(\app\models\LikeProperty::className(), ['properties_id' => 'id']);
     }
 
     /**

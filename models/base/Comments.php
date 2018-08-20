@@ -7,19 +7,23 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "like_property".
+ * This is the base-model class for table "comments".
  *
  * @property integer $id
- * @property string $date_like
- * @property integer $properties_id
- * @property integer $user_id
+ * @property string $smg
+ * @property string $date
  * @property integer $status
+ * @property integer $user_id
+ * @property integer $properties_id
+ * @property integer $answer_id
  *
+ * @property \app\models\Comments $answer
+ * @property \app\models\Comments[] $comments
  * @property \app\models\Properties $properties
  * @property \app\models\User $user
  * @property string $aliasModel
  */
-abstract class LikeProperty extends \yii\db\ActiveRecord
+abstract class Comments extends \yii\db\ActiveRecord
 {
 
 
@@ -29,7 +33,7 @@ abstract class LikeProperty extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'like_property';
+        return 'comments';
     }
 
     /**
@@ -38,9 +42,11 @@ abstract class LikeProperty extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['date_like'], 'safe'],
-            [['properties_id', 'user_id'], 'required'],
-            [['properties_id', 'user_id', 'status'], 'integer'],
+            [['smg', 'user_id', 'properties_id'], 'required'],
+            [['smg'], 'string'],
+            [['date'], 'safe'],
+            [['status', 'user_id', 'properties_id', 'answer_id'], 'integer'],
+            [['answer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Comments::className(), 'targetAttribute' => ['answer_id' => 'id']],
             [['properties_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Properties::className(), 'targetAttribute' => ['properties_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
         ];
@@ -53,11 +59,29 @@ abstract class LikeProperty extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('models', 'ID'),
-            'date_like' => Yii::t('models', 'Date Like'),
-            'properties_id' => Yii::t('models', 'Properties ID'),
-            'user_id' => Yii::t('models', 'User ID'),
+            'smg' => Yii::t('models', 'Smg'),
+            'date' => Yii::t('models', 'Date'),
             'status' => Yii::t('models', 'Status'),
+            'user_id' => Yii::t('models', 'User ID'),
+            'properties_id' => Yii::t('models', 'Properties ID'),
+            'answer_id' => Yii::t('models', 'Answer ID'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAnswer()
+    {
+        return $this->hasOne(\app\models\Comments::className(), ['id' => 'answer_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComments()
+    {
+        return $this->hasMany(\app\models\Comments::className(), ['answer_id' => 'id']);
     }
 
     /**
