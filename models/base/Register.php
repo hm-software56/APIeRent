@@ -16,6 +16,8 @@ use Yii;
  * @property string $phone
  * @property string $address
  * @property string $register_type
+ * @property string $photo
+ * @property string $photo_bg
  *
  * @property \app\models\User[] $users
  * @property string $aliasModel
@@ -45,11 +47,12 @@ abstract class Register extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['first_name', 'last_name', 'email', 'phone', 'address', 'register_type'], 'required'],
+            [['first_name', 'last_name', 'email', 'phone', 'register_type'], 'required'],
             [['address', 'register_type'], 'string'],
             [['first_name', 'last_name'], 'string', 'max' => 255],
             [['email'], 'string', 'max' => 50],
             [['phone'], 'string', 'max' => 20],
+            [['photo', 'photo_bg'], 'string', 'max' => 100],
             ['register_type', 'in', 'range' => [
                     self::REGISTER_TYPE_LANDLORD,
                     self::REGISTER_TYPE_TENANT,
@@ -71,6 +74,8 @@ abstract class Register extends \yii\db\ActiveRecord
             'phone' => Yii::t('models', 'Phone'),
             'address' => Yii::t('models', 'Address'),
             'register_type' => Yii::t('models', 'Register Type'),
+            'photo' => Yii::t('models', 'Photo'),
+            'photo_bg' => Yii::t('models', 'Photo Bg'),
         ];
     }
 

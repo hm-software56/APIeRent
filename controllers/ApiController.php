@@ -18,6 +18,7 @@ use yii\httpclient\Client;
 use yii\imagine\Image;
 use yii\web\Response;
 use yii\web\UploadedFile;
+use yii\db\Expression;
 
 class ApiController extends \yii\web\Controller
 {
@@ -41,7 +42,7 @@ class ApiController extends \yii\web\Controller
             }
             if (!empty($user)) {
 
-                $token = array('first_name' => ucfirst($user->register->first_name));
+                $token = array('first_name' => ucfirst($user->register->first_name),'photo_profile'=>$user->register->photo,'photo_bg'=>$user->register->photo_bg);
                 $js = array_merge($user->attributes, $token);
                 return json_encode($js);
                 //return $user;
@@ -177,7 +178,10 @@ class ApiController extends \yii\web\Controller
         type.name as type_name,
         photo.name as photo_name
         ')
-            ->joinWith(['propertiesDetails as pd', 'propertiesType as type', 'propertiesDetails.photos as photo'])->asArray()->all();
+            ->joinWith(['propertiesDetails as pd', 'propertiesType as type', 'propertiesDetails.photos as photo'])
+            ->asArray()
+            ->orderBy('id DESC')
+            ->all();
 
         \Yii::$app->response->format = Response::FORMAT_JSON;
         $row = ['rows' => $model];
@@ -271,10 +275,29 @@ class ApiController extends \yii\web\Controller
                 $savedfiles = $realFileName;
                 $imagine = Image::getImagine();
                 $image = $imagine->open(\Yii::$app->basePath . '/web/images/' . $savedfiles);
-                $image->resize(new Box(500, 300))->save(\Yii::$app->basePath . '/web/images/small/' . $savedfiles, ['quality' => 70]);
+                if(isset($_POST['name']) && ($_POST['name']=="profile_img" || $_POST['name']=="profileBg_img"))
+                {
+                    $image->save(\Yii::$app->basePath . '/web/images/small/' . $savedfiles, ['quality' => 60]);
+                }else{
+                    $image->resize(new Box(500, 300))->save(\Yii::$app->basePath . '/web/images/small/' . $savedfiles, ['quality' => 70]);
+                }
+                
             } else {
                 $savedfiles = 'Error save file';
             } //Your uploaded file is saved, you can process it further from here
+        }
+
+        /*======== Use for update profile profile bg ========*/
+        if(isset($_POST['edit']))
+        {
+            $user=User::find()->where(['id'=>$_POST['userid']])->one();
+            if(isset($_POST['name']) && $_POST['name']=='profile_img')
+            {
+                Register::updateAll(['photo' =>$savedfiles], 'id='.$user->register_id.'');
+            }elseif(isset($_POST['name']) && $_POST['name']=='profileBg_img')
+            {
+                Register::updateAll(['photo_bg' =>$savedfiles], 'id='.$user->register_id.'');
+            }
         }
         \Yii::$app->response->format = Response::FORMAT_JSON;
         return $savedfiles;
@@ -514,6 +537,31 @@ class ApiController extends \yii\web\Controller
         $comment = Comments::find()->where(['properties_id' => $houseID])->andWhere('answer_id is null')->count();
         \Yii::$app->response->format = Response::FORMAT_JSON;
         return $comment;
+    }
+
+    public function actionShowprofile($id)
+    {
+        $user=User::find()->joinWith(['register'])->where(['user.id'=>$id])->asArray()->one();
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        return $user;
+    }
+    public function actionEditprofile()
+    {
+        if(isset($_POST['id']))
+        {
+        $user=User::find()->where(['id'=>$_POST['id']])->one();
+        $register=Register::find()->where(['id'=>$user->register_id])->one();
+        $register->first_name=$_POST['first_name'];
+        $register->last_name=$_POST['last_name'];
+        $register->email=$_POST['email'];
+        $register->phone=$_POST['phone'];
+        $register->address=$_POST['address'];
+        $register->photo=$_POST['photo'];
+        $register->photo_bg=$_POST['photo_bg'];
+        $register->save();
+        }
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        return $register;
     }
 
 }
