@@ -15,10 +15,8 @@ use Yii;
  * @property integer $status
  * @property integer $user_id
  * @property integer $properties_id
- * @property integer $answer_id
  *
- * @property \app\models\Comments $answer
- * @property \app\models\Comments[] $comments
+ * @property \app\models\AnswerComments[] $answerComments
  * @property \app\models\Properties $properties
  * @property \app\models\User $user
  * @property string $aliasModel
@@ -45,8 +43,7 @@ abstract class Comments extends \yii\db\ActiveRecord
             [['smg', 'user_id', 'properties_id'], 'required'],
             [['smg'], 'string'],
             [['date'], 'safe'],
-            [['status', 'user_id', 'properties_id', 'answer_id'], 'integer'],
-            [['answer_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Comments::className(), 'targetAttribute' => ['answer_id' => 'id']],
+            [['status', 'user_id', 'properties_id'], 'integer'],
             [['properties_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Properties::className(), 'targetAttribute' => ['properties_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\User::className(), 'targetAttribute' => ['user_id' => 'id']]
         ];
@@ -64,24 +61,15 @@ abstract class Comments extends \yii\db\ActiveRecord
             'status' => Yii::t('models', 'Status'),
             'user_id' => Yii::t('models', 'User ID'),
             'properties_id' => Yii::t('models', 'Properties ID'),
-            'answer_id' => Yii::t('models', 'Answer ID'),
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAnswer()
+    public function getAnswerComments()
     {
-        return $this->hasOne(\app\models\Comments::className(), ['id' => 'answer_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getComments()
-    {
-        return $this->hasMany(\app\models\Comments::className(), ['answer_id' => 'id']);
+        return $this->hasMany(\app\models\AnswerComments::className(), ['comments_id' => 'id']);
     }
 
     /**

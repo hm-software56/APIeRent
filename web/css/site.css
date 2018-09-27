@@ -482,3 +482,18 @@ demo-gallery__img--main {
     border-radius: 8px;
 }
 
+#gmap0-map-canvas{
+    width: 100% !important;
+    height: 100% !important;
+    position:fixed !important;
+}
+#getmap{
+    width: 100% !important;
+    height: 90% !important;
+    position: absolute !important;
+}
+.mr{
+    position: fixed;
+    bottom: 3px;
+    width: 100%;
+}

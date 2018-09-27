@@ -15,6 +15,7 @@ use app\models\Properties;
 use app\models\LikeProperty;
 use app\models\AlertPackage;
 use yii\httpclient\Client;
+use app\models\Maps;
 
 class SiteController extends Controller
 {
@@ -346,7 +347,11 @@ class SiteController extends Controller
             'model' =>$model
         ]);
     }
-
+    public function actionGetmap()
+    {
+        $map=New Maps();
+        $this->render('map',['model'=>$map]);
+    }
    
 
 }

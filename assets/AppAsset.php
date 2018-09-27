@@ -23,17 +23,15 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
-        'css/swiper.css',
-        'PhotoSwipe/dist/photoswipe.css',
-        'PhotoSwipe/dist/default-skin/default-skin.css',
+       // 'css/swiper.css',
+       // 'PhotoSwipe/dist/photoswipe.css',
+       // 'PhotoSwipe/dist/default-skin/default-skin.css',
     ];
     public $js = [
-        'js/block.submit.js',
-        'js/swiper.js',
-        'PhotoSwipe/dist/photoswipe.js',
-        'PhotoSwipe/dist/photoswipe-ui-default.js',
-        //'js/photomodalswipe.js',
-        //'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js',
+      //  'js/block.submit.js',
+      //  'js/swiper.js',
+      //  'PhotoSwipe/dist/photoswipe.js',
+      //  'PhotoSwipe/dist/photoswipe-ui-default.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -15,8 +15,10 @@ use Yii;
  * @property double $fee
  * @property integer $properties_id
  * @property string $per
+ * @property integer $currency_id
  *
  * @property \app\models\Photo[] $photos
+ * @property \app\models\Currency $currency
  * @property \app\models\Properties $properties
  * @property \app\models\PropertiesDetailTranslate[] $propertiesDetailTranslates
  * @property string $aliasModel
@@ -46,10 +48,11 @@ abstract class PropertiesDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['details', 'fee', 'properties_id', 'per'], 'required'],
+            [['details', 'fee', 'properties_id', 'per', 'currency_id'], 'required'],
             [['details', 'per'], 'string'],
-            [['status', 'properties_id'], 'integer'],
+            [['status', 'properties_id', 'currency_id'], 'integer'],
             [['fee'], 'number'],
+            [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Currency::className(), 'targetAttribute' => ['currency_id' => 'id']],
             [['properties_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Properties::className(), 'targetAttribute' => ['properties_id' => 'id']],
             ['per', 'in', 'range' => [
                     self::PER_M,
@@ -71,6 +74,7 @@ abstract class PropertiesDetail extends \yii\db\ActiveRecord
             'fee' => Yii::t('models', 'Fee'),
             'properties_id' => Yii::t('models', 'Properties ID'),
             'per' => Yii::t('models', 'Per'),
+            'currency_id' => Yii::t('models', 'Currency ID'),
         ];
     }
 
@@ -80,6 +84,14 @@ abstract class PropertiesDetail extends \yii\db\ActiveRecord
     public function getPhotos()
     {
         return $this->hasMany(\app\models\Photo::className(), ['properties_detail_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCurrency()
+    {
+        return $this->hasOne(\app\models\Currency::className(), ['id' => 'currency_id']);
     }
 
     /**

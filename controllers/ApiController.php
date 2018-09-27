@@ -19,6 +19,9 @@ use yii\imagine\Image;
 use yii\web\Response;
 use yii\web\UploadedFile;
 use yii\db\Expression;
+use app\models\Currency;
+use app\models\AnswerComments;
+use app\models\Maps;
 
 class ApiController extends \yii\web\Controller
 {
@@ -176,9 +179,14 @@ class ApiController extends \yii\web\Controller
         pd.fee,
         pd.per,
         type.name as type_name,
-        photo.name as photo_name
+        photo.name as photo_name,
+        currency.name as currency_name
         ')
-            ->joinWith(['propertiesDetails as pd', 'propertiesType as type', 'propertiesDetails.photos as photo'])
+            ->joinWith(['propertiesDetails as pd',
+             'propertiesType as type', 
+             'propertiesDetails.photos as photo',
+             'propertiesDetails.currency as currency'
+             ])
             ->asArray()
             ->orderBy('id DESC')
             ->all();
@@ -198,9 +206,14 @@ class ApiController extends \yii\web\Controller
         pd.fee,
         pd.per,
         type.name as type_name,
-        photo.name as photo_name
+        photo.name as photo_name,
+        currency.name as currency_name
         ')
-            ->joinWith(['propertiesDetails as pd', 'propertiesType as type', 'propertiesDetails.photos as photo'])
+            ->joinWith(['propertiesDetails as pd',
+             'propertiesType as type', 
+             'propertiesDetails.photos as photo',
+             'propertiesDetails.currency as currency',
+             ])
             ->where(['properties.id' => $id])
             ->asArray()
             ->all();
@@ -228,11 +241,15 @@ class ApiController extends \yii\web\Controller
         pd.fee,
         pd.per,
         type.name as type_name,
-        photo.name as photo_name
+        photo.name as photo_name,
+        currency.name as currency_name
         ')
             ->joinWith(['propertiesDetails as pd',
                 'propertiesType as type',
-                'propertiesDetails.photos as photo', 'likeProperties as liked','comments'])
+                'propertiesDetails.photos as photo',
+                'propertiesDetails.currency as currency',
+                'likeProperties as liked','comments'
+                 ])
             ->where(['properties.user_id' => $id])
             ->asArray()->all();
         LikeProperty::updateAll(['status' => 0], ['user_id' => $id]);
@@ -245,6 +262,15 @@ class ApiController extends \yii\web\Controller
     public function actionListpropertiestype()
     {
         $model = PropertiesType::find()->all();
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        $row = ['rows' => $model];
+        return $row;
+    }
+
+
+    public function actionListcurrency()
+    {
+        $model = Currency::find()->all();
         \Yii::$app->response->format = Response::FORMAT_JSON;
         $row = ['rows' => $model];
         return $row;
@@ -316,6 +342,10 @@ class ApiController extends \yii\web\Controller
             $propertiesdetail->fee = $_POST['fee'];
             $model->date_start = date('Y-m-d');
             $model->user_id = $_POST['userID'];
+            if ($_POST['long']!='null' && $_POST['lat']!='null') {
+                $model->longtitude=$_POST['long'];
+                $model->lattitude=$_POST['lat'];
+            }
             if ($_POST['per'] == 'ເດືອນ') {
                 $propertiesdetail->per = 'm';
             } else {
@@ -335,6 +365,11 @@ class ApiController extends \yii\web\Controller
             $model->date_end = $enddate;
             $model->status = 1;
             if ($model->save()) {
+                $currency = Currency::find()->where(['name' => $_POST['currency']])->one();
+                if (!empty($currency)) {
+                    $propertiesdetail->currency_id=$currency->id;
+                }
+
                 $propertiesdetail->properties_id = $model->id;
                 if ($propertiesdetail->save() && !empty($_POST['photos'])) {
                     $re = str_replace("[", "", $_POST['photos']);
@@ -362,6 +397,10 @@ class ApiController extends \yii\web\Controller
             $model->packages_id = 1;
             //$model->date_create = date('Y-m-d H:i:s');
             //$model->user_id =$_POST['userID'];
+            if ($_POST['long']!='null' && $_POST['lat']!='null') {
+                $model->longtitude=$_POST['long'];
+                $model->lattitude=$_POST['lat'];
+            }
             $propertiesdetail->details = $_POST['details'];
             $propertiesdetail->fee = $_POST['fee'];
             //$model->date_start=date('Y-m-d');
@@ -376,6 +415,10 @@ class ApiController extends \yii\web\Controller
                 $model->properties_type_id = $type->id;
             }
             if ($model->save()) {
+                $currency = Currency::find()->where(['name' => $_POST['currency']])->one();
+                if (!empty($currency)) {
+                    $propertiesdetail->currency_id=$currency->id;
+                }
                 $propertiesdetail->properties_id = $model->id;
                 if ($propertiesdetail->save() && !empty($_POST['photos'])) {
                     Photo::deleteAll(['properties_detail_id' => $propertiesdetail->id]);
@@ -389,7 +432,7 @@ class ApiController extends \yii\web\Controller
                         $dphoto->save();
                     }
                     \Yii::$app->response->format = Response::FORMAT_JSON;
-                    return ['id' => $model->id, 'did' => $propertiesdetail->id];
+                    return ['id' =>''.$model->id.'', 'did' =>''.$propertiesdetail->id.''];
 
                 }
             }
@@ -523,18 +566,49 @@ class ApiController extends \yii\web\Controller
         }
 
     }
+    public function actionAnwercomments()
+    {
+        $answercomment = new AnswerComments;
+        if (isset($_POST['userID'])) {
+            $answercomment->smg = $_POST['smg'];
+            $answercomment->user_id = $_POST['userID'];
+            $answercomment->comments_id=$_POST['idq'];
+            if ($answercomment->save()) {
+                $comment = Comments::find()
+                    ->joinWith(['user','user.register','answerComments'])
+                    ->where(['comments.properties_id' => $_POST['houseID']])
+                    ->asArray()->orderBy('comments.id DESC')->all();
+                \Yii::$app->response->format = Response::FORMAT_JSON;
+                return $comment;
+            }
+        } else {
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+            return 'Errors Add comment';
+        }
+
+    }
+
     public function actionListcomments($houseID)
     {
         $comment = Comments::find()
+        ->joinWith(['user','user.register','answerComments'])
+        ->where(['comments.properties_id' => $houseID])->asArray()->orderBy('comments.id DESC')->all();
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        return $comment;
+    }
+
+    public function actionListanswers($idq)
+    {
+        $comment = Comments::find()
         ->joinWith(['user','user.register'])
-        ->where(['properties_id' => $houseID])->andWhere('answer_id is null')->asArray()->orderBy('id DESC')->all();
+        ->where(['answer_id' => $idq])->asArray()->orderBy('id DESC')->all();
         \Yii::$app->response->format = Response::FORMAT_JSON;
         return $comment;
     }
 
     public function actionCountcomments($houseID)
     {
-        $comment = Comments::find()->where(['properties_id' => $houseID])->andWhere('answer_id is null')->count();
+        $comment = Comments::find()->where(['properties_id' => $houseID])->count();
         \Yii::$app->response->format = Response::FORMAT_JSON;
         return $comment;
     }
@@ -564,4 +638,27 @@ class ApiController extends \yii\web\Controller
         return $register;
     }
 
+    public function actionGetmap($user_id)
+    {
+        $this->layout='main_map';
+        $map=new Maps;
+        if($map->load(Yii::$app->request->post()))
+        {
+            $map->user_id=$user_id;
+            $map->save();
+        }
+        return $this->render('map',['model'=>$map]);
+    }
+    public function actionGetlatlong($user_id)
+    {
+        $map=Maps::find()->where(['user_id'=>$user_id])->orderBy('id DESC')->one();
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        return $map;
+    }
+    public function actionViewmap($id)
+    {
+        $this->layout='main_map';
+        $model = Properties::find()->where(['id' => $id])->one();
+        return $this->render('viewmap',['model'=>$model]);
+    }
 }

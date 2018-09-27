@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
 class Properties extends BaseProperties
 {
 
+    public $search;
     public function behaviors()
     {
         return ArrayHelper::merge(
