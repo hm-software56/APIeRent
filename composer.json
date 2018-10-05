@@ -36,7 +36,8 @@
         "yiisoft/yii2-httpclient": "^2.0",
         "yiisoft/yii2-imagine": "*",
         "ibrarturi/yii2-latlng-finder": "dev-master",
-        "2amigos/yii2-google-maps-library": "*"
+        "2amigos/yii2-google-maps-library": "*",
+        "omgdef/yii2-multilingual-behavior": "^2.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

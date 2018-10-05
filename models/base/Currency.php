@@ -13,6 +13,7 @@ use Yii;
  * @property string $name
  * @property string $code
  *
+ * @property \app\models\CurrencyTranslate[] $currencyTranslates
  * @property \app\models\PropertiesDetail[] $propertiesDetails
  * @property string $aliasModel
  */
@@ -50,6 +51,14 @@ abstract class Currency extends \yii\db\ActiveRecord
             'name' => Yii::t('models', 'Name'),
             'code' => Yii::t('models', 'Code'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCurrencyTranslates()
+    {
+        return $this->hasMany(\app\models\CurrencyTranslate::className(), ['currency_id' => 'id']);
     }
 
     /**

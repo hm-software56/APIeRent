@@ -16,10 +16,17 @@ use Yii;
  * @property integer $properties_id
  * @property string $per
  * @property integer $currency_id
+ * @property integer $number_bed
+ * @property integer $number_bath
+ * @property string $village
+ * @property integer $district_id
+ * @property integer $province_id
  *
  * @property \app\models\Photo[] $photos
  * @property \app\models\Currency $currency
+ * @property \app\models\District $district
  * @property \app\models\Properties $properties
+ * @property \app\models\Province $province
  * @property \app\models\PropertiesDetailTranslate[] $propertiesDetailTranslates
  * @property string $aliasModel
  */
@@ -48,12 +55,15 @@ abstract class PropertiesDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['details', 'fee', 'properties_id', 'per', 'currency_id'], 'required'],
+            [['details', 'fee', 'properties_id', 'per', 'currency_id', 'district_id', 'province_id'], 'required'],
             [['details', 'per'], 'string'],
-            [['status', 'properties_id', 'currency_id'], 'integer'],
+            [['status', 'properties_id', 'currency_id', 'number_bed', 'number_bath', 'district_id', 'province_id'], 'integer'],
             [['fee'], 'number'],
+            [['village'], 'string', 'max' => 255],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Currency::className(), 'targetAttribute' => ['currency_id' => 'id']],
+            [['district_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\District::className(), 'targetAttribute' => ['district_id' => 'id']],
             [['properties_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Properties::className(), 'targetAttribute' => ['properties_id' => 'id']],
+            [['province_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\models\Province::className(), 'targetAttribute' => ['province_id' => 'id']],
             ['per', 'in', 'range' => [
                     self::PER_M,
                     self::PER_Y,
@@ -75,6 +85,11 @@ abstract class PropertiesDetail extends \yii\db\ActiveRecord
             'properties_id' => Yii::t('models', 'Properties ID'),
             'per' => Yii::t('models', 'Per'),
             'currency_id' => Yii::t('models', 'Currency ID'),
+            'number_bed' => Yii::t('models', 'Number Bed'),
+            'number_bath' => Yii::t('models', 'Number Bath'),
+            'village' => Yii::t('models', 'Village'),
+            'district_id' => Yii::t('models', 'District ID'),
+            'province_id' => Yii::t('models', 'Province ID'),
         ];
     }
 
@@ -97,9 +112,25 @@ abstract class PropertiesDetail extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getDistrict()
+    {
+        return $this->hasOne(\app\models\District::className(), ['id' => 'district_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getProperties()
     {
         return $this->hasOne(\app\models\Properties::className(), ['id' => 'properties_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProvince()
+    {
+        return $this->hasOne(\app\models\Province::className(), ['id' => 'province_id']);
     }
 
     /**

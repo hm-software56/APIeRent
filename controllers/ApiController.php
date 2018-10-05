@@ -22,6 +22,8 @@ use yii\db\Expression;
 use app\models\Currency;
 use app\models\AnswerComments;
 use app\models\Maps;
+use app\models\Province;
+use app\models\District;
 
 class ApiController extends \yii\web\Controller
 {
@@ -259,18 +261,34 @@ class ApiController extends \yii\web\Controller
         return $row;
     }
 
-    public function actionListpropertiestype()
+    public function actionListpropertiestype($lang)
     {
-        $model = PropertiesType::find()->all();
+        $model = PropertiesType::find()->localized($lang)->all();
         \Yii::$app->response->format = Response::FORMAT_JSON;
         $row = ['rows' => $model];
         return $row;
     }
 
 
-    public function actionListcurrency()
+    public function actionListcurrency($lang)
     {
-        $model = Currency::find()->all();
+        $model = Currency::find()->localized($lang)->all();
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        $row = ['rows' => $model];
+        return $row;
+    }
+
+    public function actionListprovince($lang)
+    {
+        $model =Province::find()->localized($lang)->all();
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        $row = ['rows' => $model];
+        return $row;
+    }
+
+    public function actionListdistrictbyprovince($lang,$province_id)
+    {
+        $model =District::find()->localized($lang)->all();
         \Yii::$app->response->format = Response::FORMAT_JSON;
         $row = ['rows' => $model];
         return $row;

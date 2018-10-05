@@ -14,12 +14,25 @@ class PropertiesType extends BasePropertiesType
 
     public function behaviors()
     {
-        return ArrayHelper::merge(
-            parent::behaviors(),
-            [
-                # custom behaviors
-            ]
-        );
+        return [
+            'ml' => [
+                'class' => \omgdef\multilingual\MultilingualBehavior::className(),
+                'languages' => [
+                    'ru' => 'Russian',
+                    'en-US' => 'English',
+                ],
+                'defaultLanguage' => 'la',
+                'langForeignKey' => 'properties_type_id',
+                'tableName' => "{{%properties_type_translate}}",
+                'attributes' => [
+                    'name',
+                ]
+            ],
+        ];
+    }
+    public static function find()
+    {
+        return new \omgdef\multilingual\MultilingualQuery(get_called_class());
     }
 
     public function rules()

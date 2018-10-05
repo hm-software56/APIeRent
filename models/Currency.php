@@ -14,12 +14,25 @@ class Currency extends BaseCurrency
 
     public function behaviors()
     {
-        return ArrayHelper::merge(
-            parent::behaviors(),
-            [
-                # custom behaviors
-            ]
-        );
+        return [
+            'ml' => [
+                'class' => \omgdef\multilingual\MultilingualBehavior::className(),
+                'languages' => [
+                    'ru' => 'Russian',
+                    'en-US' => 'English',
+                ],
+                'defaultLanguage' => 'la',
+                'langForeignKey' => 'currency_id',
+                'tableName' => "{{%currency_translate}}",
+                'attributes' => [
+                    'name',
+                ]
+            ],
+        ];
+    }
+    public static function find()
+    {
+        return new \omgdef\multilingual\MultilingualQuery(get_called_class());
     }
 
     public function rules()
